@@ -1,0 +1,121 @@
+/*********************** Devices ******************************/
+.devices-row {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.monitor-img-wrapper {
+  width: 90%;
+  display: flex;
+}
+
+.devices-offset-img {
+  background: white;
+  position: absolute;
+  width: 18%;
+  top: 40%;
+  left: 350px;
+  z-index: 1;
+  /* height: 150px; */
+}
+
+/*********************** Clients ******************************/
+.clients-img-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+}
+
+.clients-offset-img {
+  position: absolute;
+  top: 19vmin;
+  right: 6vmin;
+}
+
+/*********************** Integrations ******************************/
+.integrations-img-wrapper {
+  padding: 0.6rem;
+  border-radius: 0.6rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  max-width: 100px;
+  height: 100px;
+  max-height: 100px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
+    rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+
+.integrations-offset-img {
+  position: absolute;
+  top: 19vmin;
+  right: 6vmin;
+}
+
+/*********************** Pricing ******************************/
+.pricing-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1rem;
+  align-items: center;
+}
+
+.card-button {
+  background: var(--green) !important;
+  color: white !important;
+  padding: 0.5rem 1.5rem !important;
+  letter-spacing: 2px !important;
+  font-weight: 600 !important;
+}
+
+/*********************** ContentWrapper ******************************/
+#scroll-btns-container {
+  position: absolute;
+  right: 0.5rem;
+  top: -10px;
+  background: none;
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 1rem 0;
+  z-index: 1;
+}
+#scroll-btns-container-horizontal {
+  position: absolute;
+  right: 0.5rem;
+  bottom: -10px;
+  background: none;
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 1rem 0;
+  z-index: 1;
+}
+
+#scroll-btns-container button {
+  background: black;
+  border: none;
+  outline: none;
+  padding: 0.45rem !important;
+  border-radius: 100%;
+  padding: 0.5rem;
+  margin: 1rem 0.25rem 0;
+  box-shadow: 0 0 5px 1px #808080bd;
+  transition: all 750ms ease;
+}
+
+#scroll-btns-container button#current {
+  background: #F75253;
+}
+@media only screen and (max-width: 600px) {
+  .devices-offset-img {
+    width: 25%;
+
+    left: 75vw;
+  }
+}

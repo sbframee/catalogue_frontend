@@ -1,23 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import { useState } from "react";
 
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import MainAdmin from "./pages/MainAdmin/MainAdmin";
+import ItemCategories from "./pages/Master/ItemCategories";
+import Items from "./pages/Master/Items"
+import Credentials from "./pages/Setup/Credentials";
 function App() {
+  const [userUuid, setUserUuid] = useState(
+    localStorage.getItem("organization_uuid")
+  );
+  axios.defaults.baseURL = "http://localhost:9000";
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path={`/catalogue`} element={<Home />} />
+          {userUuid ? (
+            <>
+              <Route
+                path={`/admin`}
+                element={<MainAdmin />}
+              />
+              <Route
+                path={`/admin/itemCategory`}
+                element={<ItemCategories  />}
+              />
+              <Route
+                path={`/admin/item`}
+                element={<Items  />}
+              />
+              <Route
+                path={`/admin/credentials`}
+                element={<Credentials  />}
+              />
+              <Route path="*" element={<Navigate replace to={"/admin"} />} />
+            </>
+          ) : (
+            <>
+              <Route
+                path={`/admin-login`}
+                element={<LoginPage setUserUuid={setUserUuid} />}
+              />
+              <Route path="*" element={<Navigate replace to={"/admin-login"} />} />
+            </>
+          )}
+        </Routes>
+      </Router>
     </div>
   );
 }
