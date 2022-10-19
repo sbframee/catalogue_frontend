@@ -127,8 +127,8 @@ const TypesOfOutlets = ({ item, value }) => {
       </div>
       <div
         style={{
-          position: "absolute",
-          bottom: "-22vh",
+          position: "fixed",
+          bottom: "2vh",
           left: "calc(50% - 20px)",
         }}
       >

@@ -27,12 +27,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
       activecategories?.category_uuid
     );
   }, [activecategories?.category_uuid, organization?.organization_uuid]);
-  function checkScrollDirectionIsUp(event) {
-    if (event.wheelDelta) {
-      return event.wheelDelta > 0;
-    }
-    return event.deltaY < 0;
-  }
+
   const pages = useMemo(
     () =>
       Items?.map((item, i) => ({
@@ -49,7 +44,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
   const handlers = useSwipeable({
     onSwipedUp: () => {
       setPosition((prev) =>
-        prev.index === pages.length - 1 ? prev : prev + 1
+        prev === pages.length - 1 ? prev : prev + 1
       );
       console.log("swipeup");
     },
