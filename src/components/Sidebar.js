@@ -62,7 +62,7 @@ const Sidebar = ({ setIsItemAvilableOpen }) => {
           ]}
         />
 
-        <NavLink
+        {/* <NavLink
           setIsItemAvilableOpen={setIsItemAvilableOpen}
           title={"Quick Access"}
           icon={<QuickAccessIcon sx={{ fontSize: 50 }} />}
@@ -81,8 +81,8 @@ const Sidebar = ({ setIsItemAvilableOpen }) => {
               link: "/admin/tasks",
             },
           ]}
-        />
-        <NavLink
+        /> */}
+        {/* <NavLink
           title={"Report"}
           icon={<AssessmentIcon sx={{ fontSize: 50 }} />}
           isActive={false}
@@ -144,7 +144,7 @@ const Sidebar = ({ setIsItemAvilableOpen }) => {
               link: "/admin/RetailerMarginReport",
             },
           ]}
-        />
+        /> */}
         <NavLink
           title={"Setup"}
           icon={<SettingsIcon sx={{ fontSize: 50 }} />}
@@ -157,7 +157,7 @@ const Sidebar = ({ setIsItemAvilableOpen }) => {
 
           ]}
         />
-        <div
+        {/* <div
           className="nav_link_container"
           onClick={updateMinLevel}
           style={{ width: "100%" }}
@@ -169,9 +169,9 @@ const Sidebar = ({ setIsItemAvilableOpen }) => {
                 <span className={`nav_title`}>Update MinLevel</span>
               </p>
             </>
-            {/* Submenu popup*/}
+        
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
