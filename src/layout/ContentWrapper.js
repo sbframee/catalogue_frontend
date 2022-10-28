@@ -43,9 +43,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
 
   const handlers = useSwipeable({
     onSwipedUp: () => {
-      setPosition((prev) =>
-        prev === pages.length - 1 ? prev : prev + 1
-      );
+      setPosition((prev) => (prev === pages.length - 1 ? prev : prev + 1));
       console.log("swipeup");
     },
     onSwipedDown: () => {
@@ -68,8 +66,8 @@ const ContentWrapper = ({ organization, activecategories }) => {
         height: "fit-content",
         maxHeight: "calc(100vh - 74px)",
         overflow: "hidden",
-        background: "white",
       }}
+      className="flex"
       {...handlers}
     >
       <div
@@ -77,13 +75,14 @@ const ContentWrapper = ({ organization, activecategories }) => {
           position: "relative",
           objectFit: "contain",
           width: "100%",
-          height: "700px",
+          height: "calc(100vh - 74px)",
         }}
+        className="flex"
       >
         {pages.map((page, i) => (
           <motion.div
             key={i}
-            className="container_anime"
+            className="container_anime flex"
             initial={{ rotate: 1 }}
             animate={{
               rotate: 0,
@@ -94,11 +93,13 @@ const ContentWrapper = ({ organization, activecategories }) => {
               bounceStifafness: 260,
               bounceDamping: 20,
             }}
-            style={{ height: "100%" }}
+            style={{ height: "max-content", maxHeight: "calc(100vh - 74px)" }}
+           
           >
             <TypesOfOutlets
               item={page?.item}
               value={(position + 1 || 0) + "/" + (Items?.length || 0)}
+              organization={organization}
             />
           </motion.div>
         ))}

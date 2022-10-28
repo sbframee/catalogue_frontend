@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid";
-import { DeleteOutline, Edit, Image } from "@mui/icons-material";
+import { Cancel, DeleteOutline, Edit, Image } from "@mui/icons-material";
 import axios from "axios";
 const ItemsPage = () => {
   const [itemsData, setItemsData] = useState([]);
@@ -58,7 +58,7 @@ const ItemsPage = () => {
       setFilterItemsData(
         itemsData
           .filter((a) => a.item_title)
-          .filter((a) => disabledItem || a.status)
+          .filter((a) => disabledItem || +a.status)
           .filter(
             (a) =>
               !filterTitle ||
@@ -446,7 +446,10 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
 
   return (
     <div className="overlay">
-      <div className="modal" style={{ height: "fit-content", width: "fit-content" }}>
+      <div
+        className="modal"
+        style={{ height: "fit-content", width: "fit-content" }}
+      >
         <div
           className="content"
           style={{
@@ -474,13 +477,12 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                         setdata({
                           ...data,
                           item_title: e.target.value,
-               
                         })
                       }
                       maxLength={60}
                     />
                   </label>
-                  
+
                   <label className="selectLabel">
                     Sort Order
                     <input
@@ -498,7 +500,7 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                     />
                   </label>
                 </div>
-               
+
                 <div className="row">
                   <label className="selectLabel">
                     Item Category
@@ -534,16 +536,13 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                         setdata({
                           ...data,
                           price: e.target.value,
-                 
                         })
                       }
                       maxLength={60}
                     />
                   </label>
-                  
                 </div>
                 <div className="row">
-               
                   <label className="selectLabel">
                     Description
                     <textarea
@@ -552,7 +551,7 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                       name="sort_order"
                       className="numberInput"
                       value={data?.description}
-                      style={{height:"100px"}}
+                      style={{ height: "100px" }}
                       onChange={(e) =>
                         setdata({
                           ...data,
@@ -572,7 +571,7 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                           type="radio"
                           name="sort_order"
                           className="numberInput"
-                          checked={data?.status}
+                          checked={+data?.status}
                           style={{ height: "25px" }}
                           onClick={() =>
                             setdata((prev) => ({ ...prev, status: 1 }))
@@ -585,7 +584,7 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                           type="radio"
                           name="sort_order"
                           className="numberInput"
-                          checked={!data.status}
+                          checked={!+data.status}
                           style={{ height: "25px" }}
                           onClick={() =>
                             setdata((prev) => ({ ...prev, status: 0 }))
@@ -617,6 +616,7 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
 function PicturesPopup({ onSave, popupInfo, getItem }) {
   const [data, setdata] = useState({});
   const [images, setImages] = useState();
+  const [deleteImages, setDeletedImages] = useState([]);
 
   useEffect(() => {
     setdata(popupInfo || {});
@@ -643,6 +643,28 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
           : [image_url],
       };
     }
+
+    const response = await axios({
+      method: "put",
+      url: "/Items/putItem",
+      data: itemData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.data.success) {
+      getItem();
+      onSave();
+    }
+  };
+  const deleteSubmitHandler = async (e) => {
+    e.preventDefault();
+    let itemData = {
+      ...data,
+      image_urls: data.image_urls.filter((a) =>
+        !deleteImages.find((b) => b === a)
+      ),
+    };
 
     const response = await axios({
       method: "put",
@@ -737,21 +759,52 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                 <div className="row">
                   {data?.image_urls?.length ? (
                     data?.image_urls.map((img) => (
-                      <div className="imageContainer">
+                      <div
+                        className="imageContainer"
+                        style={
+                          deleteImages.find((b) => b === img)
+                            ? { border: "1px solid red" }
+                            : {}
+                        }
+                      >
                         <img src={img} alt="NoImage" className="previwImages" />
-                        <button
-                          onClick={() => setImages(false)}
-                          className="closeButton"
-                          style={{
-                            fontSize: "20px",
-                            right: "5px",
-                            padding: "0 10px",
-                            width: "20px",
-                            height: "20px",
-                          }}
-                        >
-                          <DeleteOutline fontSize="5px"/>
-                        </button>
+                        {deleteImages.find((b) => b === img) ? (
+                          <button
+                            onClick={() =>
+                              setDeletedImages((prev) =>
+                                prev.filter((b) => b !== img)
+                              )
+                            }
+                            className="closeButton"
+                            style={{
+                              fontSize: "20px",
+                              right: "5px",
+                              padding: "0 10px",
+                              width: "20px",
+                              height: "20px",
+                            }}
+                            type="button"
+                          >
+                            <Cancel fontSize="5px" />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              setDeletedImages((prev) => [...prev, img])
+                            }
+                            className="closeButton"
+                            style={{
+                              fontSize: "20px",
+                              right: "5px",
+                              padding: "0 10px",
+                              width: "20px",
+                              height: "20px",
+                            }}
+                            type="button"
+                          >
+                            <DeleteOutline fontSize="5px" />
+                          </button>
+                        )}
                       </div>
                     ))
                   ) : (
@@ -763,6 +816,17 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
               {images ? (
                 <button type="submit" className="submit">
                   Upload Image
+                </button>
+              ) : (
+                ""
+              )}
+              {deleteImages.length ? (
+                <button
+                  type="button"
+                  className="submit"
+                  onClick={deleteSubmitHandler}
+                >
+                  Save
                 </button>
               ) : (
                 ""

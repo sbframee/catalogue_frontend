@@ -38,7 +38,10 @@ export default function Credentials() {
     const response = await axios({
       method: "put",
       url: "/Organization/putOrganization",
-      data: organization,
+      data: {
+        ...organization,
+        organization_uuid: localStorage.getItem("organization_uuid"),
+      },
       headers: {
         "Content-Type": "application/json",
       },

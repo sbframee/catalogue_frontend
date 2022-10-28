@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AppBar from "../layout/AppBar";
 import ContentWrapper from "../layout/ContentWrapper";
 import { styled } from "@mui/material/styles";
-import { FcPhone } from "react-icons/fc";
+import { BsTelephoneFill } from "react-icons/bs";
 import WhatsApp from "../assets/whatsapp.svg";
 
 import Fab from "@mui/material/Fab";
@@ -13,15 +13,6 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
-const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
-  ({ theme }) => ({
-    "&.Mui-selected": {
-      color: "#F75253",
-      borderBottom: "2px solid #F75253",
-    },
-  })
-);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -35,7 +26,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: 3, padding: 0 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -52,6 +43,14 @@ TabPanel.propTypes = {
 const Layout = ({ organization }) => {
   const [item_categories, setItemCategories] = useState([]);
   const [activecategories, setActiveCategories] = useState({});
+  const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+    ({ theme }) => ({
+      "&.Mui-selected": {
+        color: organization?.theme_color || "#000",
+        borderBottom: `2px solid ${organization?.theme_color || "#000"} `,
+      },
+    })
+  );
   const GetOrganizationData = async (organization_uuid) => {
     const response = await axios({
       method: "get",
@@ -89,13 +88,23 @@ const Layout = ({ organization }) => {
   return (
     <div className="layout">
       <AppBar organization={organization} />
-      <Box sx={{ width: "100vw" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          width: "100vw",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          alignItems: "flex-start",
+          height: "cal(100vh - 56px)",
+        }}
+        className="flex"
+      >
+        <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100vw" }}>
           <Tabs
             value={activecategories}
             onChange={handleChange}
             variant="scrollable"
             aria-label="scrollable force styled tabs  example"
+            indicatorColor="#000"
           >
             {item_categories.map((item, i) => {
               return (
@@ -118,6 +127,7 @@ const Layout = ({ organization }) => {
             value={activecategories.index}
             index={item?.index}
             key={item?.category_uuid}
+            className="flex"
           >
             <ContentWrapper
               organization={organization}
@@ -129,29 +139,38 @@ const Layout = ({ organization }) => {
 
       <Fab
         style={{
-          backgroundColor: "transparent",
+          // backgroundColor: "transparent",
+          borderRadius: "50%",
+          width: "70px",
+          height: "70px",
           fontWeight: "600",
           // color: "white",
           letterSpacing: "2px",
           position: "fixed",
           bottom: "1rem",
           left: "10%",
+          backgroundColor: "#01a0e2",
+
+          fontSize: "50px",
         }}
         variant="extended"
         href={"tel:" + organization?.organization_call_number}
       >
-        <FcPhone sx={{ mr: 1 }} style={{ fontSize: "40px" }} />
+        <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
       </Fab>
 
       <Fab
         style={{
-          backgroundColor: "transparent",
+          backgroundColor: "#0f9d15",
+          borderRadius: "50%",
+          width: "70px",
+          height: "70px",
           fontWeight: "600",
+          // color: "white",
           letterSpacing: "2px",
           position: "fixed",
           bottom: "1rem",
           right: "10%",
-          textTransform: "lowercase",
         }}
         variant="extended"
         href={`http://api.whatsapp.com/send?phone=${

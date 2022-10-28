@@ -2864,4 +2864,5 @@ button.counter-save-btn {
   justify-content: center;
   width: 30px;
   height: 30px;
+  border: 1px solid #000;
 }

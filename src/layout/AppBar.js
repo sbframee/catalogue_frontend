@@ -1,22 +1,14 @@
 import * as React from "react";
-import {
-  AppBar,
-  Avatar,
-  Box,
-  Container,
-  IconButton,
-  Toolbar,
-} from "@mui/material";
-import logo from "../assets/logo.png";
-import {
-  WhatsApp,
-  Call,
-  AttachEmailOutlined as Email,
-} from "@mui/icons-material";
+import { AppBar, Container, Toolbar } from "@mui/material";
+import { HiBars3 } from "react-icons/hi2";
+import { ShoppingCart } from "@mui/icons-material";
 
 const ResponsiveAppBar = ({ organization }) => {
   return (
-    <AppBar position="static" style={{ background: "#F75253" }}>
+    <AppBar
+      position="static"
+      style={{ background: organization?.theme_color || "#000" }}
+    >
       <Container maxWidth="xl">
         <Toolbar
           disableGutters
@@ -26,17 +18,32 @@ const ResponsiveAppBar = ({ organization }) => {
             justifyContent: "space-between",
           }}
         >
-          {console.log(organization)}
+          <div
+            style={{ width: "30px", height: "20px", objectFit: "contain" }}
+            className="flex"
+          >
+            <HiBars3 style={{ fontSize: "30px", fontWeight: "bold" }} />
+          </div>
+
           {organization?.organization_logo ? (
             <img
               src={organization?.organization_logo}
               alt="NoImage"
-              style={{ width: "50px", height: "50px",objectFit:"contain" }}
+              style={{ width: "50px", height: "50px", objectFit: "contain" }}
             />
           ) : (
             ""
           )}
-          <h4 style={{width:"100%"}}>{organization?.organization_title || ""}</h4>
+          {organization?.organization_title ? (
+            <h4 style={{ width: "300px" }}>
+              {organization?.organization_title || ""}
+            </h4>
+          ) : (
+            ""
+          )}
+          <div>
+            <ShoppingCart />
+          </div>
           {/* <Avatar src={logo} alt="logo" sx={{ width: 48, height: 48 }} /> */}
           {/* <Box>
             <IconButton

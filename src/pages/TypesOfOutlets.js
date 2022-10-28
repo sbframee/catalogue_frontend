@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-const TypesOfOutlets = ({ item, value }) => {
+const TypesOfOutlets = ({ item, value, organization }) => {
   const [position, setPosition] = useState(0);
   const pages = useMemo(
     () => item?.image_urls?.map((a, i) => ({ index: i, src: a })) || [],
@@ -46,24 +46,19 @@ const TypesOfOutlets = ({ item, value }) => {
       {...handlers}
       style={{
         position: "relative",
-        backgroundColor: "rgba(247, 82, 83,0.5)",
-        width: "90%",
+        width: "100%",
         height: "fit-content",
         borderRadius: "30px",
-        padding: "10px",
+        // padding: "10px",
         marginTop: "10px",
       }}
     >
-      <h1 style={{ zIndex: "9999", padding: "20px 10px" }}>
-        {item.item_title || ""}
-      </h1>
-
       <div
         style={{
           position: "relative",
           objectFit: "contain",
-          width: "350px",
-          height: "350px",
+          width: "100vw",
+          height: "40vh",
         }}
       >
         {pages.map((page, i) => (
@@ -73,7 +68,7 @@ const TypesOfOutlets = ({ item, value }) => {
             initial={{ rotate: 1 }}
             animate={{
               rotate: 0,
-              left: `${(page.index - (position.index || 0)) * 100 - 1}vw`,
+              left: `${(page.index - (position.index || 0)) * 100 + 1}vw`,
             }}
             transition={{
               type: "tween",
@@ -82,11 +77,13 @@ const TypesOfOutlets = ({ item, value }) => {
             }}
             style={{
               objectFit: "contain",
+              width: "100vw",
+              height: "100%",
             }}
           >
             <div
               className="navigation_btn"
-              style={{ left: "0", opacity: position.index === 0 ? 0.2 : 1 }}
+              style={{ left: "15px", opacity: position.index === 0 ? 0.2 : 1 }}
               onClick={() => {
                 setPosition((prev) =>
                   prev.index === 0
@@ -100,7 +97,7 @@ const TypesOfOutlets = ({ item, value }) => {
             <div
               className="navigation_btn"
               style={{
-                right: "0",
+                right: "10px",
                 opacity: position.index === pages.length - 1 ? 0.2 : 1,
               }}
               onClick={() => {
@@ -113,17 +110,48 @@ const TypesOfOutlets = ({ item, value }) => {
             >
               <ArrowForwardIosIcon fontSize="30" />
             </div>
+
             <img
               src={page?.src}
-              style={{ objectFit: "contain", width: "350px", height: "350px" }}
+              style={{ objectFit: "contain", width: "100%", height: "100%" }}
               alt="abc"
             />
           </motion.div>
         ))}
       </div>
-      <div style={{ zIndex: 99999999, padding: "0 10px" }}>
-        <h1>Rs.{item?.price || 0}</h1>
-        <p>{item?.description || "Description..."}</p>
+      <div
+        className="flex"
+        style={{
+          zIndex: 99999999,
+          padding: "0 10px",
+          width: "100%",
+          flexDirection: "column",
+        }}
+      >
+        <h1
+          style={{
+            width: "100%",
+            textAlign: "left",
+            color: organization?.theme_color || "#000",
+          }}
+        >
+          {item.item_title || ""}
+        </h1>
+        <p style={{ width: "100%", textAlign: "left", wordWrap: "break-word" }}>
+          Description...
+          <br />
+          {item?.description?.split("\n")?.map(function (itemDes, idx) {
+            return (
+              <span key={idx}>
+                {itemDes}
+                <br />
+              </span>
+            );
+          }) || ""}
+        </p>
+        <h1 style={{ width: "100%", textAlign: "right" }}>
+          Rs.{item?.price || 0}
+        </h1>
       </div>
       <div
         style={{
