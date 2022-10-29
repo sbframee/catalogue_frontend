@@ -17,8 +17,9 @@ function App() {
   const [userUuid, setUserUuid] = useState(
     localStorage.getItem("organization_uuid")
   );
-  axios.defaults.baseURL = "http://43.204.105.114:9000/";
+  // axios.defaults.baseURL = "http://43.204.105.114:9000/";
   // axios.defaults.baseURL = "http://localhost:9000";
+  axios.defaults.baseURL = "https://api.sanjusk.com/";
 
   return (
     <div className="App">
