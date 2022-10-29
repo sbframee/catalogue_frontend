@@ -18,7 +18,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
       },
     });
     if (response.data.success) {
-      setItems(response.data.result).sort((a, b) => +a.sort_order - +b.sort_order);
+      setItems(response.data.result)
     }
   };
   useEffect(() => {
@@ -30,7 +30,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
 
   const pages = useMemo(
     () =>
-      Items?.map((item, i) => ({
+      Items?.sort((a, b) => +a.sort_order - +b.sort_order)?.map((item, i) => ({
         index: i,
         name: item?.item_title,
         item,
