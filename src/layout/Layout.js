@@ -62,7 +62,9 @@ const Layout = ({ organization }) => {
     });
     if (response.data.success) {
       setItemCategories(
-        response.data.result.map((a, i) => ({ ...a, index: i }))
+        response.data.result
+          .map((a, i) => ({ ...a, index: i }))
+          .sort((a, b) => +a.sort_order - +b.sort_order)
       );
     }
   };
@@ -158,7 +160,7 @@ const Layout = ({ organization }) => {
       >
         <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
       </Fab>
-
+{console.log(organization)}
       <Fab
         style={{
           backgroundColor: "#0f9d15",
@@ -177,8 +179,8 @@ const Layout = ({ organization }) => {
           organization?.organization_whatsapp_number
         }&text=${encodeURI(organization?.organization_whatsapp_message)}`}
       >
-        <img src={WhatsApp} />
-        {/* <WhatsApp sx={{ mr: 1 }} /> */}
+        <img src={WhatsApp} alt=""/>
+
       </Fab>
     </div>
   );

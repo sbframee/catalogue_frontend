@@ -18,7 +18,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
       },
     });
     if (response.data.success) {
-      setItems(response.data.result);
+      setItems(response.data.result).sort((a, b) => +a.sort_order - +b.sort_order);
     }
   };
   useEffect(() => {

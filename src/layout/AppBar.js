@@ -29,13 +29,13 @@ const ResponsiveAppBar = ({ organization }) => {
             <img
               src={organization?.organization_logo}
               alt="NoImage"
-              style={{ width: "50px", height: "50px", objectFit: "contain" }}
+              style={{ width: "200px", objectFit: "contain" }}
             />
           ) : (
             ""
           )}
           {organization?.organization_title ? (
-            <h4 style={{ width: "300px" }}>
+            <h4 style={{ width: "200px" }}>
               {organization?.organization_title || ""}
             </h4>
           ) : (
@@ -44,32 +44,6 @@ const ResponsiveAppBar = ({ organization }) => {
           <div>
             <ShoppingCart />
           </div>
-          {/* <Avatar src={logo} alt="logo" sx={{ width: 48, height: 48 }} /> */}
-          {/* <Box>
-            <IconButton
-              aria-label="WhatsApp Us"
-              color="inherit"
-              href={`http://api.whatsapp.com/send?phone=+919146780897&text=${encodeURI(
-                "Hi, I would like to know more about the product"
-              )}`}
-            >
-              <WhatsApp />
-            </IconButton>
-            <IconButton
-              aria-label="Call Us"
-              color="inherit"
-              href="tel:+919146780897"
-            >
-              <Call />
-            </IconButton>
-            <IconButton
-              aria-label="Email Us"
-              color="inherit"
-              href="mailto:support@fooddo.in"
-            >
-              <Email />
-            </IconButton>
-          </Box> */}
         </Toolbar>
       </Container>
     </AppBar>

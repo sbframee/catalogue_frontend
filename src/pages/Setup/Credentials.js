@@ -34,6 +34,7 @@ export default function Credentials() {
   useEffect(() => {
     GetData();
   }, []);
+  // console.log(organization);
   const onSubmit = async () => {
     const response = await axios({
       method: "put",
@@ -103,7 +104,7 @@ export default function Credentials() {
                       type="text"
                       name="route_title"
                       className="numberInput"
-                      value={organization?.organization_title}
+                      value={organization.organization_title}
                       onChange={(e) =>
                         setOrganization((prev) => ({
                           ...prev,
@@ -121,7 +122,7 @@ export default function Credentials() {
                       type="number"
                       name="route_title"
                       className="numberInput"
-                      value={organization?.organization_call_number}
+                      value={+organization.organization_call_number}
                       onChange={(e) =>
                         setOrganization((prev) => ({
                           ...prev,
@@ -140,11 +141,14 @@ export default function Credentials() {
                       type="number"
                       name="route_title"
                       className="numberInput"
-                      value={organization?.organization_whatsapp_number}
+                      value={+organization.organization_whatsapp_number}
                       onChange={(e) =>
                         setOrganization((prev) => ({
                           ...prev,
-                          organization_whatsapp_number: e.target.value,
+                          organization_whatsapp_number:
+                            e.target.value.length > 13
+                              ? prev.organization_whatsapp_number
+                              : e.target.value,
                         }))
                       }
                       maxLength={9}
@@ -158,14 +162,14 @@ export default function Credentials() {
                       name="route_title"
                       className="numberInput"
                       style={{ height: "100px" }}
-                      value={organization?.organization_whatsapp_message}
+                      value={organization.organization_whatsapp_message}
                       onChange={(e) =>
                         setOrganization((prev) => ({
                           ...prev,
                           organization_whatsapp_message: e.target.value,
                         }))
                       }
-                      maxLength={3}
+                      // maxLength={3}
                     />
                   </label>
                 </div>

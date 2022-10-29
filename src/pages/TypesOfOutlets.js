@@ -113,7 +113,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
 
             <img
               src={page?.src}
-              style={{ objectFit: "contain", width: "100%", height: "100%" }}
+              style={{ objectFit: "fill", width: "100vw", height: "100%" }}
               alt="abc"
             />
           </motion.div>
@@ -150,7 +150,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
           }) || ""}
         </p>
         <h1 style={{ width: "100%", textAlign: "right" }}>
-          Rs.{item?.price || 0}
+          {item?.price ? "Rs." + item?.price : ""}
         </h1>
       </div>
       <div
