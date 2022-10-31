@@ -40,7 +40,7 @@ const LoginPage = ({ setUserUuid }) => {
         localStorage.setItem("user_mobile", data.user_mobile);
         localStorage.setItem("warehouse", JSON.stringify(data.warehouse));
 
-        // window.location.assign("/admin");
+        window.location.assign("/admin");
 
         setIsLoading(false);
       }else setIsLoading(false)

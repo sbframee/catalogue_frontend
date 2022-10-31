@@ -399,11 +399,12 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
         status: 1,
         ...popupInfo.data,
       });
-    else
+      else
       setdata({
         category_uuid: itemCategories[0]?.category_uuid,
-
+        
         status: 1,
+        organization_uuid:localStorage.getItem("organization_uuid")
       });
   }, [itemCategories, popupInfo.data, popupInfo?.type]);
 
