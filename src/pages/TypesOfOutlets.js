@@ -58,7 +58,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
           position: "relative",
           objectFit: "contain",
           width: "100vw",
-          height: "40vh",
+           height: "100vw"
         }}
       >
         {pages.map((page, i) => (
@@ -78,7 +78,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
             style={{
               objectFit: "contain",
               width: "100vw",
-              height: "100%",
+               height: "100vw"
             }}
           >
             <div
@@ -113,7 +113,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
 
             <img
               src={page?.src}
-              style={{ objectFit: "fill", width: "100vw", height: "100%" }}
+              style={{ objectFit: "fill", width: "100vw", height: "100vw" }}
               alt="abc"
             />
           </motion.div>
