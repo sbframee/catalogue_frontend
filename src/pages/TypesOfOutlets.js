@@ -137,18 +137,24 @@ const TypesOfOutlets = ({ item, value, organization }) => {
         >
           {item.item_title || ""}
         </h1>
-        <p style={{ width: "100%", textAlign: "left", wordWrap: "break-word" }}>
-          Description...
-          <br />
-          {item?.description?.split("\n")?.map(function (itemDes, idx) {
-            return (
-              <span key={idx}>
-                {itemDes}
-                <br />
-              </span>
-            );
-          }) || ""}
-        </p>
+        {item?.description ? (
+          <p
+            style={{ width: "100%", textAlign: "left", wordWrap: "break-word" }}
+          >
+            Description...
+            <br />
+            {item?.description?.split("\n")?.map(function (itemDes, idx) {
+              return (
+                <span key={idx}>
+                  {itemDes}
+                  <br />
+                </span>
+              );
+            }) || ""}
+          </p>
+        ) : (
+          ""
+        )}
         <h1 style={{ width: "100%", textAlign: "right" }}>
           {item?.price ? "Rs." + item?.price : ""}
         </h1>
