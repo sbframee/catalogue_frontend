@@ -399,12 +399,12 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
         status: 1,
         ...popupInfo.data,
       });
-      else
+    else
       setdata({
         category_uuid: itemCategories[0]?.category_uuid,
-        
+
         status: 1,
-        organization_uuid:localStorage.getItem("organization_uuid")
+        organization_uuid: localStorage.getItem("organization_uuid"),
       });
   }, [itemCategories, popupInfo.data, popupInfo?.type]);
 
@@ -618,7 +618,8 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
   const [data, setdata] = useState({});
   const [images, setImages] = useState();
   const [deleteImages, setDeletedImages] = useState([]);
-
+  const [editImages, setEditImages] = useState([]);
+  console.log(deleteImages);
   useEffect(() => {
     setdata(popupInfo || {});
   }, [popupInfo]);
@@ -633,10 +634,13 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
       url,
       method: "put",
       headers: { "Content-Type": "multipart/form-data" },
-      data: images,
+      data: images.file,
     });
     if (result.status === 200) {
-      let image_url = url?.split("?")[0];
+      let image_url = {
+        url: url?.split("?")[0],
+        sort_order: images?.sort_order || 0,
+      };
       itemData = {
         ...itemData,
         image_urls: itemData?.image_urls?.length
@@ -662,10 +666,27 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
     e.preventDefault();
     let itemData = {
       ...data,
-      image_urls: data.image_urls.filter((a) =>
-        !deleteImages.find((b) => b === a)
+      image_urls: data.image_urls.filter(
+        (a) => !deleteImages.find((b) => b === a?.url)
       ),
     };
+
+    const response = await axios({
+      method: "put",
+      url: "/Items/putItem",
+      data: itemData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (response.data.success) {
+      getItem();
+      onSave();
+    }
+  };
+  const editSubmitHandler = async (e) => {
+    e.preventDefault();
+    let itemData = data;
 
     const response = await axios({
       method: "put",
@@ -719,7 +740,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                       className="numberInput"
                       style={{ display: "none" }}
                       onChange={
-                        (e) => setImages(e.target.files[0])
+                        (e) => setImages({ file: e.target.files[0] })
                         // setImages((prev) =>
                         //   prev.length
                         //     ? [...prev, ...e.target.files]
@@ -763,17 +784,21 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                       <div
                         className="imageContainer"
                         style={
-                          deleteImages.find((b) => b === img)
+                          deleteImages.find((b) => b === img?.url)
                             ? { border: "1px solid red" }
                             : {}
                         }
                       >
-                        <img src={img} alt="NoImage" className="previwImages" />
-                        {deleteImages.find((b) => b === img) ? (
+                        <img
+                          src={img?.url}
+                          alt="NoImage"
+                          className="previwImages"
+                        />
+                        {deleteImages.find((b) => b === img?.url) ? (
                           <button
                             onClick={() =>
                               setDeletedImages((prev) =>
-                                prev.filter((b) => b !== img)
+                                prev.filter((b) => b !== img?.url)
                               )
                             }
                             className="closeButton"
@@ -791,7 +816,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                         ) : (
                           <button
                             onClick={() =>
-                              setDeletedImages((prev) => [...prev, img])
+                              setDeletedImages((prev) => [...prev, img?.url])
                             }
                             className="closeButton"
                             style={{
@@ -806,6 +831,34 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                             <DeleteOutline fontSize="5px" />
                           </button>
                         )}
+                        <div
+                          style={{
+                            position: "absolute",
+                            fontSize: "20px",
+                            left: "0px",
+                            // padding: "0 10px",
+                            width: "40px",
+                            height: "20px",
+                            bottom: "5px",
+                          }}
+                        >
+                          <input
+                            style={{ width: "100%" }}
+                            type="number"
+                            value={img?.sort_order}
+                            onChange={(e) => {
+                              setEditImages(true);
+                              setdata((prev) => ({
+                                ...prev,
+                                image_urls: data.image_urls.map((b) =>
+                                  b.url === img?.url
+                                    ? { ...b, sort_order: e.target.value }
+                                    : b
+                                ),
+                              }));
+                            }}
+                          />
+                        </div>
                       </div>
                     ))
                   ) : (
@@ -828,6 +881,17 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                   onClick={deleteSubmitHandler}
                 >
                   Save
+                </button>
+              ) : (
+                ""
+              )}
+              {editImages ? (
+                <button
+                  type="button"
+                  className="submit"
+                  onClick={editSubmitHandler}
+                >
+                  Update
                 </button>
               ) : (
                 ""
