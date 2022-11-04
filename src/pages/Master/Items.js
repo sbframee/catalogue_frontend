@@ -754,7 +754,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                   {images ? (
                     <div className="imageContainer">
                       <img
-                        src={URL.createObjectURL(images)}
+                        src={URL.createObjectURL(images.file)}
                         className="previwImages"
                         alt="yourimage"
                       />
@@ -777,6 +777,13 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                   )}
                 </div>
               </div>
+              {images ? (
+                <button type="submit" className="submit">
+                  Upload Image
+                </button>
+              ) : (
+                ""
+              )}
               <div className="formGroup">
                 <div className="row">
                   {data?.image_urls?.length ? (
@@ -867,13 +874,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                 </div>
               </div>
 
-              {images ? (
-                <button type="submit" className="submit">
-                  Upload Image
-                </button>
-              ) : (
-                ""
-              )}
+           
               {deleteImages.length ? (
                 <button
                   type="button"

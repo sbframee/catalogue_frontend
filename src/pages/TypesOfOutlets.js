@@ -8,7 +8,10 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const TypesOfOutlets = ({ item, value, organization }) => {
   const [position, setPosition] = useState(0);
   const pages = useMemo(
-    () => item?.image_urls?.map((a, i) => ({ index: i, src: a })) || [],
+    () =>
+      item?.image_urls
+        ?.sort((a, b) => a.sort_order - b.sort_order)
+        .map((a, i) => ({ index: i, src: a.url })) || [],
 
     [item?.image_urls]
   );
@@ -58,7 +61,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
           position: "relative",
           objectFit: "contain",
           width: "100vw",
-           height: "100vw"
+          height: "100vw",
         }}
       >
         {pages.map((page, i) => (
@@ -78,7 +81,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
             style={{
               objectFit: "contain",
               width: "100vw",
-               height: "100vw"
+              height: "100vw",
             }}
           >
             <div
