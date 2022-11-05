@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
 import TypesOfOutlets from "../pages/TypesOfOutlets";
 
-const ContentWrapper = ({ organization, activecategories }) => {
+const ContentWrapper = ({ organization, activecategories, Buttons }) => {
   const [position, setPosition] = useState();
   const [Items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const GetOrganizationData = async (organization_uuid, category_uuid) => {
     const response = await axios({
       method: "get",
@@ -19,6 +20,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
     });
     if (response.data.success) {
       setItems(response.data.result);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -59,7 +61,22 @@ const ContentWrapper = ({ organization, activecategories }) => {
     touchEventOptions: { passive: true },
   });
   console.log(position);
-  return (
+  return loading ? (
+    <Box>
+      <div
+        className="flex"
+        style={{
+          width: "100vw",
+          maxWidth: "480px",
+          height: "fit-content",
+          maxHeight: "calc(100vh - 74px)",
+          overflow: "hidden",
+        }}
+      >
+        <CircularProgress />
+      </div>
+    </Box>
+  ) : (
     <div
       style={{
         width: "100vw",
@@ -98,6 +115,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
               height: "max-content",
               maxHeight: "calc(100vh - 74px)",
               width: "100%",
+              overflowY: "scroll",
             }}
           >
             <TypesOfOutlets
@@ -105,6 +123,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
               value={(position + 1 || 0) + "/" + (Items?.length || 0)}
               organization={organization}
             />
+            <Buttons />
           </motion.div>
         ))}
       </div>

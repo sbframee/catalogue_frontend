@@ -178,6 +178,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
       >
         <h2>{value || 0}</h2>
       </div>
+      
     </div>
   );
 };

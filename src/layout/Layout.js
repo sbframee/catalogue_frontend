@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AppBar from "../layout/AppBar";
 import ContentWrapper from "../layout/ContentWrapper";
 import { styled } from "@mui/material/styles";
@@ -45,6 +45,15 @@ const Layout = ({ organization }) => {
   const [item_categories, setItemCategories] = useState([]);
   const [activecategories, setActiveCategories] = useState({});
   const [dropdown, setDropDown] = useState(false);
+  const [height, setHeight] = useState(null);
+  const parentElement = useCallback(
+    (node) => {
+      if (node !== null) {
+        setHeight(node.getBoundingClientRect().height);
+      }
+    },
+    [activecategories]
+  );
   console.log(organization);
   const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
     ({ theme }) => ({
@@ -90,8 +99,135 @@ const Layout = ({ organization }) => {
     console.log(newValue);
     setActiveCategories(newValue);
   };
+  const Buttons = () => (
+    <>
+        {dropdown && (
+          <div
+            className="overlay"
+            style={{
+              zIndex: "99999",
+            }}
+          >
+            <motion.div
+              id="customer-details-dropdown"
+              initial={{ x: dropdown === "mobile" ? -100 : 100, y: 100 }}
+              animate={{ x: 0, y: 0 }}
+              className="flex"
+              style={
+                dropdown === "mobile"
+                  ? {
+                      bottom: "15vh",
+                      left: "10%",
+                      flexDirection: "column",
+                      zIndex: "200",
+                      width: "max-content",
+                      height: "max-content",
+                    }
+                  : {
+                      bottom: "15vh",
+                      right: "10%",
+                      flexDirection: "column",
+                      zIndex: "200",
+                      width: "max-content",
+                      height: "max-content",
+                    }
+              }
+              onMouseLeave={() => setDropDown(false)}
+            >
+              {dropdown === "mobile"
+                ? organization?.org_call_number.map((a) => (
+                    <button
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#01a0e2",
+                      }}
+                      className="simple_Logout_button"
+                      type="button"
+                      onClick={() => {
+                        window.open(`tel:+${a?.mobile}`);
+                        setDropDown(false);
+                      }}
+                    >
+                      {a.tag}
+                    </button>
+                  ))
+                : organization?.org_whatsapp_number?.map((a) => (
+                    <button
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#0f9d15",
+                      }}
+                      className="simple_Logout_button"
+                      type="button"
+                      onClick={() => {
+                        window.open(
+                          `http://api.whatsapp.com/send?phone=${
+                            a?.mobile
+                          }&text=${encodeURI(a?.message)}`
+                        );
+                        setDropDown(false);
+                      }}
+                    >
+                      {a.tag}
+                    </button>
+                  ))}
+            </motion.div>
+          </div>
+        )}
+      <motion.div
+        className="flex"
+        style={{
+          // backgroundColor: "transparent",
+          borderRadius: "50%",
+          width: "70px",
+          height: "70px",
+          fontWeight: "600",
+
+          letterSpacing: "2px",
+
+          bottom: "6vh",
+
+          left: "10%",
+          backgroundColor: "#01a0e2",
+
+          fontSize: "40px",
+          position: "absolute",
+          zIndex: dropdown === "mobile" ? "999999" : "9999",
+        }}
+        variant="extended"
+        onClick={() => setDropDown((prev) => (prev ? "" : "mobile"))}
+      >
+        <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
+      </motion.div>
+      <motion.div
+        className="flex"
+        style={{
+          backgroundColor: "#0f9d15",
+          borderRadius: "50%",
+          width: "70px",
+          height: "70px",
+          fontWeight: "600",
+          // color: "white",
+          letterSpacing: "2px",
+          position: "absolute",
+          bottom: "6vh",
+
+          right: "10%",
+          zIndex: dropdown === "whatsapp" ? "999999" : "9999",
+        }}
+        variant="extended"
+        onClick={() => setDropDown((prev) => (prev ? "" : "whatsapp"))}
+      >
+        <img src={WhatsApp} alt="" />
+      </motion.div>
+    </>
+  );
   return (
-    <div className="flex" style={{ width: "100vw" }}>
+    <div
+      className="flex"
+      style={{ width: "100vw", height: "100vh" }}
+      ref={parentElement}
+    >
       <div className="layout">
         <AppBar organization={organization} />
         <Box
@@ -138,127 +274,13 @@ const Layout = ({ organization }) => {
               <ContentWrapper
                 organization={organization}
                 activecategories={activecategories}
+                Buttons={Buttons}
               />
             </TabPanel>
           ))}
         </Box>
 
-        {dropdown && (
-          <div
-            className="overlay"
-            style={{
-              zIndex: "99999",
-            }}
-          >
-            <motion.div
-              id="customer-details-dropdown"
-              initial={{ x: dropdown === "mobile" ? -100 : 100, y: 100 }}
-              animate={{ x: 0, y: 0 }}
-              className="flex"
-              style={
-                dropdown === "mobile"
-                  ? {
-                      bottom: "100px",
-                      left: "10%",
-                      flexDirection: "column",
-                      zIndex: "200",
-                      width: "max-content",
-                      height: "max-content",
-                    }
-                  : {
-                      bottom: "100px",
-                      right: "10%",
-                      flexDirection: "column",
-                      zIndex: "200",
-                      width: "max-content",
-                      height: "max-content",
-                    }
-              }
-              onMouseLeave={() => setDropDown(false)}
-            >
-              {dropdown === "mobile"
-                ? organization?.org_call_number.map((a) => (
-                    <button
-                      style={{
-                        padding: "10px",
-                        backgroundColor: "#01a0e2",
-                      }}
-                      className="simple_Logout_button"
-                      type="button"
-                      onClick={() => {
-                        window.open(`tel:+${a?.number}`);
-                        setDropDown(false);
-                      }}
-                    >
-                      {a.tag}
-                    </button>
-                  ))
-                : organization?.org_whatsapp_number?.map((a) => (
-                    <button
-                      style={{
-                        padding: "10px",
-                        backgroundColor: "#0f9d15",
-                      }}
-                      className="simple_Logout_button"
-                      type="button"
-                      onClick={() => {
-                        window.open(
-                          `http://api.whatsapp.com/send?phone=${
-                            a?.number
-                          }&text=${encodeURI(a?.number)}`
-                        );
-                        setDropDown(false);
-                      }}
-                    >
-                      {a.tag}
-                    </button>
-                  ))}
-            </motion.div>
-          </div>
-        )}
-        <Fab
-          style={{
-            // backgroundColor: "transparent",
-            borderRadius: "50%",
-            width: "70px",
-            height: "70px",
-            fontWeight: "600",
-            // color: "white",
-            letterSpacing: "2px",
-
-            bottom: "1rem",
-            left: "10%",
-            backgroundColor: "#01a0e2",
-
-            fontSize: "50px",
-            position: "absolute",
-            zIndex: dropdown === "mobile" ? "999999" : "9999",
-          }}
-          variant="extended"
-          onClick={() => setDropDown((prev) => (prev ? "" : "mobile"))}
-        >
-          <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
-        </Fab>
-
-        <Fab
-          style={{
-            backgroundColor: "#0f9d15",
-            borderRadius: "50%",
-            width: "70px",
-            height: "70px",
-            fontWeight: "600",
-            // color: "white",
-            letterSpacing: "2px",
-            position: "absolute",
-            bottom: "1rem",
-            right: "10%",
-            zIndex: dropdown === "whatsapp" ? "999999" : "9999",
-          }}
-          variant="extended"
-          onClick={() => setDropDown((prev) => (prev ? "" : "whatsapp"))}
-        >
-          <img src={WhatsApp} alt="" />
-        </Fab>
+      
       </div>
     </div>
   );
