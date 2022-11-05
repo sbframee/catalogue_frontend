@@ -18,7 +18,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
       },
     });
     if (response.data.success) {
-      setItems(response.data.result)
+      setItems(response.data.result);
     }
   };
   useEffect(() => {
@@ -63,7 +63,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
     <div
       style={{
         width: "100vw",
-        maxWidth:"480px",
+        maxWidth: "480px",
         height: "fit-content",
         maxHeight: "calc(100vh - 74px)",
         overflow: "hidden",
@@ -94,8 +94,11 @@ const ContentWrapper = ({ organization, activecategories }) => {
               bounceStifafness: 260,
               bounceDamping: 20,
             }}
-            style={{ height: "max-content", maxHeight: "calc(100vh - 74px)",width:"100%" }}
-           
+            style={{
+              height: "max-content",
+              maxHeight: "calc(100vh - 74px)",
+              width: "100%",
+            }}
           >
             <TypesOfOutlets
               item={page?.item}

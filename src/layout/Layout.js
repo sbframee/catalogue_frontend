@@ -4,7 +4,7 @@ import ContentWrapper from "../layout/ContentWrapper";
 import { styled } from "@mui/material/styles";
 import { BsTelephoneFill } from "react-icons/bs";
 import WhatsApp from "../assets/whatsapp.svg";
-
+import { motion } from "framer-motion";
 import Fab from "@mui/material/Fab";
 import axios from "axios";
 
@@ -13,6 +13,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { ArrowDropDown } from "@mui/icons-material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,6 +44,8 @@ TabPanel.propTypes = {
 const Layout = ({ organization }) => {
   const [item_categories, setItemCategories] = useState([]);
   const [activecategories, setActiveCategories] = useState({});
+  const [dropdown, setDropDown] = useState(false);
+  console.log(organization);
   const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
     ({ theme }) => ({
       "&.Mui-selected": {
@@ -88,7 +91,7 @@ const Layout = ({ organization }) => {
     setActiveCategories(newValue);
   };
   return (
-    <div className="flex" style={{width:"100vw"}}>
+    <div className="flex" style={{ width: "100vw" }}>
       <div className="layout">
         <AppBar organization={organization} />
         <Box
@@ -140,6 +143,79 @@ const Layout = ({ organization }) => {
           ))}
         </Box>
 
+        {dropdown && (
+          <div
+            className="overlay"
+            style={{
+              zIndex: "99999",
+            }}
+          >
+            <motion.div
+              id="customer-details-dropdown"
+              initial={{ x: dropdown === "mobile" ? -100 : 100, y: 100 }}
+              animate={{ x: 0, y: 0 }}
+              className="flex"
+              style={
+                dropdown === "mobile"
+                  ? {
+                      bottom: "100px",
+                      left: "10%",
+                      flexDirection: "column",
+                      zIndex: "200",
+                      width: "max-content",
+                      height: "max-content",
+                    }
+                  : {
+                      bottom: "100px",
+                      right: "10%",
+                      flexDirection: "column",
+                      zIndex: "200",
+                      width: "max-content",
+                      height: "max-content",
+                    }
+              }
+              onMouseLeave={() => setDropDown(false)}
+            >
+              {dropdown === "mobile"
+                ? organization?.org_call_number.map((a) => (
+                    <button
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#01a0e2",
+                      }}
+                      className="simple_Logout_button"
+                      type="button"
+                      onClick={() => {
+                        window.open(`tel:+${a?.number}`);
+                        setDropDown(false);
+                      }}
+                    >
+                      {a.tag}
+                    </button>
+                  ))
+                : organization?.org_whatsapp_number?.map((a) => (
+                    <button
+                      style={{
+                        padding: "10px",
+                        backgroundColor: "#0f9d15",
+                      }}
+                      className="simple_Logout_button"
+                      type="button"
+                      onClick={() => {
+                        window.open(
+                          `http://api.whatsapp.com/send?phone=${
+                            a?.number
+                          }&text=${encodeURI(a?.number)}`
+                        );
+                        setDropDown(false);
+                      }}
+                    >
+                      {a.tag}
+                    </button>
+                  ))}
+            </motion.div>
+          </div>
+        )}
         <Fab
           style={{
             // backgroundColor: "transparent",
@@ -149,16 +225,17 @@ const Layout = ({ organization }) => {
             fontWeight: "600",
             // color: "white",
             letterSpacing: "2px",
-        
+
             bottom: "1rem",
             left: "10%",
             backgroundColor: "#01a0e2",
 
             fontSize: "50px",
             position: "absolute",
+            zIndex: dropdown === "mobile" ? "999999" : "9999",
           }}
           variant="extended"
-          href={"tel:" + organization?.organization_call_number}
+          onClick={() => setDropDown((prev) => (prev ? "" : "mobile"))}
         >
           <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
         </Fab>
@@ -175,11 +252,10 @@ const Layout = ({ organization }) => {
             position: "absolute",
             bottom: "1rem",
             right: "10%",
+            zIndex: dropdown === "whatsapp" ? "999999" : "9999",
           }}
           variant="extended"
-          href={`http://api.whatsapp.com/send?phone=${
-            organization?.organization_whatsapp_number
-          }&text=${encodeURI(organization?.organization_whatsapp_message)}`}
+          onClick={() => setDropDown((prev) => (prev ? "" : "whatsapp"))}
         >
           <img src={WhatsApp} alt="" />
         </Fab>

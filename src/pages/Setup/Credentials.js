@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Image } from "@mui/icons-material";
+import { Add, Image } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import Header from "../../components/Header";
@@ -17,6 +17,7 @@ let initials = {
 export default function Credentials() {
   const [organization, setOrganization] = useState(initials);
   const [image, setImage] = useState();
+  const [done, setDone] = useState();
   const GetData = async () => {
     const response = await axios({
       method: "get",
@@ -28,7 +29,21 @@ export default function Credentials() {
       },
     });
     if (response.data.success) {
-      setOrganization(response.data.result);
+      let data = response.data.result;
+      data = {
+        ...data,
+        org_call_number: data?.org_call_number.map((a) => ({
+          uuid: Math.random(),
+          ...a,
+        })),
+        org_whatsapp_number: data?.org_whatsapp_number.map((a) => ({
+          uuid: Math.random(),
+          ...a,
+        })),
+      };
+      setDone(true);
+      setTimeout(() => setDone(true), 3000);
+      setOrganization(data);
     }
   };
   useEffect(() => {
@@ -96,7 +111,10 @@ export default function Credentials() {
               <h2>Organization Data </h2>
             </div>
             <div className="main_data_container">
-              <div className="formGroup">
+              <div
+                className="formGroup"
+                style={{ height: "80vh", overflowY: "scroll" }}
+              >
                 <div className="row">
                   <label className="selectLabel">
                     Organization title
@@ -116,63 +134,177 @@ export default function Credentials() {
                       }
                     />
                   </label>
-                  <label className="selectLabel">
-                    Organization Call Number
-                    <input
-                      type="number"
-                      name="route_title"
-                      className="numberInput"
-                      value={+organization.organization_call_number}
-                      onChange={(e) =>
-                        setOrganization((prev) => ({
-                          ...prev,
-                          organization_call_number:
-                            e.target.value.length < 11
-                              ? e.target.value
-                              : prev.organization_call_number,
-                        }))
-                      }
-                    />
-                  </label>
-
-                  <label className="selectLabel">
-                    WhatsApp Number
-                    <input
-                      type="number"
-                      name="route_title"
-                      className="numberInput"
-                      value={+organization.organization_whatsapp_number}
-                      onChange={(e) =>
-                        setOrganization((prev) => ({
-                          ...prev,
-                          organization_whatsapp_number:
-                            e.target.value.length > 13
-                              ? prev.organization_whatsapp_number
-                              : e.target.value,
-                        }))
-                      }
-                      maxLength={9}
-                    />
-                  </label>
                 </div>
-                <div className="row">
-                  <label className="selectLabel">
-                    WhatsApp Message
-                    <textarea
-                      name="route_title"
-                      className="numberInput"
-                      style={{ height: "100px" }}
-                      value={organization.organization_whatsapp_message}
-                      onChange={(e) =>
-                        setOrganization((prev) => ({
-                          ...prev,
-                          organization_whatsapp_message: e.target.value,
-                        }))
-                      }
-                      // maxLength={3}
-                    />
-                  </label>
+                <div className="flex" style={{ justifyContent: "flex-start" }}>
+                  <h2 style={{ paddingRight: "10px" }}>
+                    Organization Call Numbers
+                  </h2>
+                  <div
+                    style={{
+                      color: "#fff",
+                      backgroundColor: organization.theme_color || "#000",
+                      borderRadius: "50%",
+                    }}
+                    className="flex"
+                    onClick={() =>
+                      setOrganization((prev) => ({
+                        ...prev,
+                        org_call_number: [
+                          ...(prev?.org_call_number || []),
+                          { uuid: Math.random(), tag: "", mobile: "" },
+                        ],
+                      }))
+                    }
+                  >
+                    <Add />
+                  </div>
                 </div>
+                {organization?.org_call_number?.map((item) => (
+                  <div className="row">
+                    <label className="selectLabel">
+                      Tag
+                      <input
+                        type="text"
+                        name="route_title"
+                        className="numberInput"
+                        value={item?.tag}
+                        onChange={(e) =>
+                          setOrganization((prev) => ({
+                            ...prev,
+                            org_call_number: prev?.org_call_number.map((a) =>
+                              a.uuid === item.uuid
+                                ? { ...a, tag: e.target.value }
+                                : a
+                            ),
+                          }))
+                        }
+                      />
+                    </label>
+                    <label className="selectLabel">
+                      Call Number
+                      <input
+                        type="number"
+                        name="route_title"
+                        className="numberInput"
+                        value={item?.mobile}
+                        onChange={(e) =>
+                          setOrganization((prev) => ({
+                            ...prev,
+                            org_call_number: prev?.org_call_number.map((a) =>
+                              a.uuid === item.uuid
+                                ? {
+                                    ...a,
+                                    mobile:
+                                      e.target.value.length > 10
+                                        ? a?.mobile
+                                        : e.target.value,
+                                  }
+                                : a
+                            ),
+                          }))
+                        }
+                      />
+                    </label>
+                  </div>
+                ))}
+                <div className="flex" style={{ justifyContent: "flex-start" }}>
+                  <h2 style={{ paddingRight: "10px" }}>
+                    Organization WhatsApp Numbers
+                  </h2>
+                  <div
+                    style={{
+                      color: "#fff",
+                      backgroundColor: organization.theme_color || "#000",
+                      borderRadius: "50%",
+                    }}
+                    className="flex"
+                    onClick={() =>
+                      setOrganization((prev) => ({
+                        ...prev,
+                        org_whatsapp_number: [
+                          ...(prev?.org_whatsapp_number || []),
+                          { uuid: Math.random(), tag: "", mobile: "" },
+                        ],
+                      }))
+                    }
+                  >
+                    <Add />
+                  </div>
+                </div>
+                {organization?.org_whatsapp_number?.map((item) => (
+                  <>
+                    <div className="row">
+                      <label className="selectLabel">
+                        Tag
+                        <input
+                          type="text"
+                          name="route_title"
+                          className="numberInput"
+                          value={item?.tag}
+                          onChange={(e) =>
+                            setOrganization((prev) => ({
+                              ...prev,
+                              org_call_number: prev?.org_call_number.map((a) =>
+                                a.uuid === item.uuid
+                                  ? { ...a, tag: e.target.value }
+                                  : a
+                              ),
+                            }))
+                          }
+                        />
+                      </label>
+                      <label className="selectLabel">
+                        WhatsApp Number
+                        <input
+                          type="number"
+                          name="route_title"
+                          className="numberInput"
+                          value={item?.mobile}
+                          onChange={(e) =>
+                            setOrganization((prev) => ({
+                              ...prev,
+                              org_call_number: prev?.org_call_number.map((a) =>
+                                a.uuid === item.uuid
+                                  ? {
+                                      ...a,
+                                      mobile:
+                                        e.target.value.length > 10
+                                          ? a?.mobile
+                                          : e.target.value,
+                                    }
+                                  : a
+                              ),
+                            }))
+                          }
+                        />
+                      </label>
+                    </div>
+                    <div className="row">
+                      <label className="selectLabel">
+                        WhatsApp Message
+                        <textarea
+                          name="route_title"
+                          className="numberInput"
+                          style={{ height: "100px" }}
+                          value={item.message}
+                          onChange={(e) =>
+                            setOrganization((prev) => ({
+                              ...prev,
+                              org_call_number: prev?.org_call_number.map((a) =>
+                                a.uuid === item.uuid
+                                  ? {
+                                      ...a,
+                                      message: e.target.value,
+                                    }
+                                  : a
+                              ),
+                            }))
+                          }
+                        />
+                      </label>
+                    </div>
+                  </>
+                ))}
 
                 <div className="bottomContent" style={{ marginTop: "40px" }}>
                   <button type="button" onClick={onSubmit}>

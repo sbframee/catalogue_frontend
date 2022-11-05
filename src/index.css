@@ -7,6 +7,10 @@
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 }
+::-webkit-scrollbar {
+  width: 0;  /* Remove scrollbar space */
+  display: none;  /* Optional: just make scrollbar invisible */
+}
 img {
   pointer-events: none;
   -webkit-touch-callout: none;
@@ -102,4 +106,23 @@ code {
   align-items: center;
   justify-content: space-evenly;
   position: relative;
+}
+.clear_Logout_button, .simple_Logout_button{
+  border: none;
+  color: #fff;
+
+  width: 100px;
+  padding: 10px 0px;
+  margin: 10px 20px;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  position: relative;
+  letter-spacing: 1px;
+  font-weight: 500;
+  white-space: nowrap;
+  /* box-shadow: 3px 4px 3px black; */
+  transition: all 0.3s ease-in-out;
+}
+.clear_Logout_button:hover, .simple_Logout_button:hover{
+  transform: scale(1.05);
 }

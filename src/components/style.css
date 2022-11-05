@@ -995,22 +995,19 @@ div.unsync-count-container {
   position: absolute;
 
   right: 10px;
-  top: 100px;
+  
 
   padding: 12px 10px;
   border-radius: 10px;
   font-weight: 500;
-  background: #ffffff;
-  box-shadow: 5px 5px 50px #00000036, -5px -5px 40px #00000012;
+  /* background: #ffffff; */
+  /* box-shadow: 5px 5px 50px #00000036, -5px -5px 40px #00000012; */
   border: none;
   text-align: inherit;
   outline: none;
 }
 
-#customer-details-dropdown.page1 {
-  right: 0;
-  top: 50px;
-}
+
 
 #customer-details-dropdown > #visits {
   color: grey;
