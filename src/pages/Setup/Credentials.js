@@ -244,7 +244,7 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_call_number: prev?.org_call_number.map((a) =>
+                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
                                 a.uuid === item.uuid
                                   ? { ...a, tag: e.target.value }
                                   : a
@@ -263,7 +263,7 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_call_number: prev?.org_call_number.map((a) =>
+                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
                                 a.uuid === item.uuid
                                   ? {
                                       ...a,
@@ -290,7 +290,7 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_call_number: prev?.org_call_number.map((a) =>
+                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
                                 a.uuid === item.uuid
                                   ? {
                                       ...a,
