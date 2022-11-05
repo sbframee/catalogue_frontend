@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 
 import { motion } from "framer-motion";
@@ -7,6 +7,12 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const TypesOfOutlets = ({ item, value, organization }) => {
   const [position, setPosition] = useState(0);
+  const [width, setWidth] = useState(null);
+  const parentElement = useCallback((node) => {
+    if (node !== null) {
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
   const pages = useMemo(
     () =>
       item?.image_urls
@@ -55,13 +61,14 @@ const TypesOfOutlets = ({ item, value, organization }) => {
         // padding: "10px",
         marginTop: "10px",
       }}
+      ref={parentElement}
     >
       <div
         style={{
           position: "relative",
           objectFit: "contain",
-          width: "100vw",
-          height: "100vw",
+          width: "100%",
+          height: width,
         }}
       >
         {pages.map((page, i) => (
@@ -71,7 +78,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
             initial={{ rotate: 1 }}
             animate={{
               rotate: 0,
-              left: `${(page.index - (position.index || 0)) * 100 + 1}vw`,
+              left: `${(page.index - (position.index || 0)) * 100}vw`,
             }}
             transition={{
               type: "tween",
@@ -80,8 +87,8 @@ const TypesOfOutlets = ({ item, value, organization }) => {
             }}
             style={{
               objectFit: "contain",
-              width: "100vw",
-              height: "100vw",
+              width: "100%",
+              height: width,
             }}
           >
             <div
@@ -116,7 +123,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
 
             <img
               src={page?.src}
-              style={{ objectFit: "fill", width: "100vw", height: "100vw" }}
+              style={{ objectFit: "fill", width: "100%", height: width }}
               alt="abc"
             />
           </motion.div>

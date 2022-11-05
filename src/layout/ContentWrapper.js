@@ -63,6 +63,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
     <div
       style={{
         width: "100vw",
+        maxWidth:"480px",
         height: "fit-content",
         maxHeight: "calc(100vh - 74px)",
         overflow: "hidden",
@@ -86,14 +87,14 @@ const ContentWrapper = ({ organization, activecategories }) => {
             initial={{ rotate: 1 }}
             animate={{
               rotate: 0,
-              top: `${(page.index - (position || 0)) * 100 - 1}vh`,
+              top: `${(page.index - (position || 0)) * 100}vh`,
             }}
             transition={{
               type: "tween",
               bounceStifafness: 260,
               bounceDamping: 20,
             }}
-            style={{ height: "max-content", maxHeight: "calc(100vh - 74px)" }}
+            style={{ height: "max-content", maxHeight: "calc(100vh - 74px)",width:"100%" }}
            
           >
             <TypesOfOutlets

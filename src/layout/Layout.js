@@ -88,100 +88,102 @@ const Layout = ({ organization }) => {
     setActiveCategories(newValue);
   };
   return (
-    <div className="layout">
-      <AppBar organization={organization} />
-      <Box
-        sx={{
-          width: "100vw",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
-          height: "cal(100vh - 56px)",
-        }}
-        className="flex"
-      >
-        <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100vw" }}>
-          <Tabs
-            value={activecategories}
-            onChange={handleChange}
-            variant="scrollable"
-            aria-label="scrollable force styled tabs  example"
-            indicatorColor="#000"
-          >
-            {item_categories.map((item, i) => {
-              return (
-                <StyledTab
-                  key={i}
-                  label={
-                    item.category_title?.length > 10
-                      ? item.category_title.slice(0, 10) + "..."
-                      : item?.category_title
-                  }
-                  {...a11yProps(item.category_uuid)}
-                />
-              );
-            })}
-          </Tabs>
+    <div className="flex" style={{width:"100vw"}}>
+      <div className="layout">
+        <AppBar organization={organization} />
+        <Box
+          sx={{
+            width: "100%",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            height: "cal(100vh - 56px)",
+          }}
+          className="flex"
+        >
+          <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100vw" }}>
+            <Tabs
+              value={activecategories}
+              onChange={handleChange}
+              variant="scrollable"
+              aria-label="scrollable force styled tabs  example"
+              indicatorColor="#000"
+            >
+              {item_categories.map((item, i) => {
+                return (
+                  <StyledTab
+                    key={i}
+                    label={
+                      item.category_title?.length > 10
+                        ? item.category_title.slice(0, 10) + "..."
+                        : item?.category_title
+                    }
+                    {...a11yProps(item.category_uuid)}
+                  />
+                );
+              })}
+            </Tabs>
+          </Box>
+
+          {item_categories.map((item, i) => (
+            <TabPanel
+              value={activecategories.index}
+              index={item?.index}
+              key={item?.category_uuid}
+              className="flex"
+            >
+              <ContentWrapper
+                organization={organization}
+                activecategories={activecategories}
+              />
+            </TabPanel>
+          ))}
         </Box>
 
-        {item_categories.map((item, i) => (
-          <TabPanel
-            value={activecategories.index}
-            index={item?.index}
-            key={item?.category_uuid}
-            className="flex"
-          >
-            <ContentWrapper
-              organization={organization}
-              activecategories={activecategories}
-            />
-          </TabPanel>
-        ))}
-      </Box>
+        <Fab
+          style={{
+            // backgroundColor: "transparent",
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            fontWeight: "600",
+            // color: "white",
+            letterSpacing: "2px",
+        
+            bottom: "1rem",
+            left: "10%",
+            backgroundColor: "#01a0e2",
 
-      <Fab
-        style={{
-          // backgroundColor: "transparent",
-          borderRadius: "50%",
-          width: "70px",
-          height: "70px",
-          fontWeight: "600",
-          // color: "white",
-          letterSpacing: "2px",
-          position: "fixed",
-          bottom: "1rem",
-          left: "10%",
-          backgroundColor: "#01a0e2",
+            fontSize: "50px",
+            position: "absolute",
+          }}
+          variant="extended"
+          href={"tel:" + organization?.organization_call_number}
+        >
+          <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
+        </Fab>
 
-          fontSize: "50px",
-        }}
-        variant="extended"
-        href={"tel:" + organization?.organization_call_number}
-      >
-        <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
-      </Fab>
-{console.log(organization)}
-      <Fab
-        style={{
-          backgroundColor: "#0f9d15",
-          borderRadius: "50%",
-          width: "70px",
-          height: "70px",
-          fontWeight: "600",
-          // color: "white",
-          letterSpacing: "2px",
-          position: "fixed",
-          bottom: "1rem",
-          right: "10%",
-        }}
-        variant="extended"
-        href={`http://api.whatsapp.com/send?phone=${
-          organization?.organization_whatsapp_number
-        }&text=${encodeURI(organization?.organization_whatsapp_message)}`}
-      >
-        <img src={WhatsApp} alt=""/>
-
-      </Fab>
+        <Fab
+          style={{
+            backgroundColor: "#0f9d15",
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            fontWeight: "600",
+            // color: "white",
+            letterSpacing: "2px",
+            position: "absolute",
+            bottom: "1rem",
+            right: "10%",
+          }}
+          variant="extended"
+          href={`http://api.whatsapp.com/send?phone=${
+            organization?.organization_whatsapp_number
+          }&text=${encodeURI(organization?.organization_whatsapp_message)}`}
+        >
+          <img src={WhatsApp} alt="" />
+        </Fab>
+      </div>
     </div>
   );
 };
