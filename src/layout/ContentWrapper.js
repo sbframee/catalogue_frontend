@@ -5,7 +5,7 @@ import { Box, CircularProgress } from "@mui/material";
 import axios from "axios";
 import TypesOfOutlets from "../pages/TypesOfOutlets";
 
-const ContentWrapper = ({ organization, activecategories, Buttons }) => {
+const ContentWrapper = ({ organization, activecategories }) => {
   const [position, setPosition] = useState();
   const [Items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,7 +123,7 @@ const ContentWrapper = ({ organization, activecategories, Buttons }) => {
               value={(position + 1 || 0) + "/" + (Items?.length || 0)}
               organization={organization}
             />
-            <Buttons />
+  
           </motion.div>
         ))}
       </div>

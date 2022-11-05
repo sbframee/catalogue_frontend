@@ -116,7 +116,7 @@ const Layout = ({ organization }) => {
               style={
                 dropdown === "mobile"
                   ? {
-                      bottom: "15vh",
+                      bottom: "10vh",
                       left: "10%",
                       flexDirection: "column",
                       zIndex: "200",
@@ -124,7 +124,7 @@ const Layout = ({ organization }) => {
                       height: "max-content",
                     }
                   : {
-                      bottom: "15vh",
+                      bottom: "10vh",
                       right: "10%",
                       flexDirection: "column",
                       zIndex: "200",
@@ -179,19 +179,19 @@ const Layout = ({ organization }) => {
         style={{
           // backgroundColor: "transparent",
           borderRadius: "50%",
-          width: "70px",
-          height: "70px",
+          width: "60px",
+          height: "60px",
           fontWeight: "600",
 
           letterSpacing: "2px",
 
-          bottom: "6vh",
+          top: "90vh",
 
           left: "10%",
           backgroundColor: "#01a0e2",
 
-          fontSize: "40px",
-          position: "absolute",
+          fontSize: "30px",
+          position: "fixed",
           zIndex: dropdown === "mobile" ? "999999" : "9999",
         }}
         variant="extended"
@@ -204,13 +204,13 @@ const Layout = ({ organization }) => {
         style={{
           backgroundColor: "#0f9d15",
           borderRadius: "50%",
-          width: "70px",
-          height: "70px",
+          width: "60px",
+          height: "60px",
           fontWeight: "600",
           // color: "white",
           letterSpacing: "2px",
-          position: "absolute",
-          bottom: "6vh",
+          position: "fixed",
+          top: "90vh",
 
           right: "10%",
           zIndex: dropdown === "whatsapp" ? "999999" : "9999",
@@ -222,7 +222,7 @@ const Layout = ({ organization }) => {
       </motion.div>
     </>
   );
-  return (
+  return (<>
     <div
       className="flex"
       style={{ width: "100vw", height: "100vh" }}
@@ -283,6 +283,8 @@ const Layout = ({ organization }) => {
       
       </div>
     </div>
+    <Buttons />
+    </>
   );
 };
 
