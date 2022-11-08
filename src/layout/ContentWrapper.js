@@ -60,7 +60,7 @@ const ContentWrapper = ({ organization, activecategories }) => {
     swipeDuration: Infinity, // allowable duration of a swipe (ms). *See Notes*
     touchEventOptions: { passive: true },
   });
-  console.log(position);
+
   return loading ? (
     <Box>
       <div
