@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Add, Image } from "@mui/icons-material";
+import { Add, Delete, Image } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import Header from "../../components/Header";
@@ -205,6 +205,18 @@ export default function Credentials() {
                         }
                       />
                     </label>
+                    <div
+                      onClick={() =>
+                        setOrganization((prev) => ({
+                          ...prev,
+                          org_call_number: prev?.org_call_number.filter(
+                            (a) => a.uuid !== item.uuid
+                          ),
+                        }))
+                      }
+                    >
+                      <Delete />
+                    </div>
                   </div>
                 ))}
                 <div className="flex" style={{ justifyContent: "flex-start" }}>
@@ -244,11 +256,12 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
-                                a.uuid === item.uuid
-                                  ? { ...a, tag: e.target.value }
-                                  : a
-                              ),
+                              org_whatsapp_number:
+                                prev?.org_whatsapp_number.map((a) =>
+                                  a.uuid === item.uuid
+                                    ? { ...a, tag: e.target.value }
+                                    : a
+                                ),
                             }))
                           }
                         />
@@ -263,21 +276,35 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
-                                a.uuid === item.uuid
-                                  ? {
-                                      ...a,
-                                      mobile:
-                                        e.target.value.length > 10
-                                          ? a?.mobile
-                                          : e.target.value,
-                                    }
-                                  : a
-                              ),
+                              org_whatsapp_number:
+                                prev?.org_whatsapp_number.map((a) =>
+                                  a.uuid === item.uuid
+                                    ? {
+                                        ...a,
+                                        mobile:
+                                          e.target.value.length > 10
+                                            ? a?.mobile
+                                            : e.target.value,
+                                      }
+                                    : a
+                                ),
                             }))
                           }
                         />
                       </label>
+                      <div
+                        onClick={() =>
+                          setOrganization((prev) => ({
+                            ...prev,
+                            org_whatsapp_number:
+                              prev?.org_whatsapp_number?.filter(
+                                (a) => a.uuid !== item.uuid
+                              ),
+                          }))
+                        }
+                      >
+                        <Delete />
+                      </div>
                     </div>
                     <div className="row">
                       <label className="selectLabel">
@@ -290,14 +317,15 @@ export default function Credentials() {
                           onChange={(e) =>
                             setOrganization((prev) => ({
                               ...prev,
-                              org_whatsapp_number: prev?.org_whatsapp_number.map((a) =>
-                                a.uuid === item.uuid
-                                  ? {
-                                      ...a,
-                                      message: e.target.value,
-                                    }
-                                  : a
-                              ),
+                              org_whatsapp_number:
+                                prev?.org_whatsapp_number.map((a) =>
+                                  a.uuid === item.uuid
+                                    ? {
+                                        ...a,
+                                        message: e.target.value,
+                                      }
+                                    : a
+                                ),
                             }))
                           }
                         />

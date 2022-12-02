@@ -526,6 +526,8 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                         ))}
                     </select>
                   </label>
+                </div>
+                <div className="row">
                   <label className="selectLabel">
                     Price
                     <input
@@ -537,6 +539,22 @@ function NewUserForm({ onSave, popupInfo, itemCategories, getItem }) {
                         setdata({
                           ...data,
                           price: e.target.value,
+                        })
+                      }
+                      maxLength={60}
+                    />
+                  </label>
+                  <label className="selectLabel">
+                    Strike Price
+                    <input
+                      type="number"
+                      name="route_title"
+                      className="numberInput"
+                      value={data?.strip_price}
+                      onChange={(e) =>
+                        setdata({
+                          ...data,
+                          strip_price: e.target.value,
                         })
                       }
                       maxLength={60}
@@ -874,7 +892,6 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
                 </div>
               </div>
 
-           
               {deleteImages.length ? (
                 <button
                   type="button"

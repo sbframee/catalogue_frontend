@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box } from "@mui/material";
-import { BsTelephoneFill } from "react-icons/bs";
-import WhatsApp from "../assets/whatsapp.svg";
+
 import { motion } from "framer-motion";
 
 import { useSwipeable } from "react-swipeable";
@@ -9,7 +7,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 const TypesOfOutlets = ({ item, value, organization }) => {
   const [position, setPosition] = useState(0);
-  const [dropdown, setDropDown] = useState(false);
+
 
   const [width, setWidth] = useState(null);
   const parentElement = useCallback((node) => {
@@ -169,7 +167,30 @@ const TypesOfOutlets = ({ item, value, organization }) => {
         ) : (
           ""
         )}
-        <h1 style={{ width: "100%", textAlign: "right" }}>
+        {item?.strip_price ? (
+          <h3
+            style={{
+              width: "100%",
+              textAlign: "right",
+              margin: "0",
+              padding: 0,
+              color: "red",
+              textDecorationLine: "line-through",
+            }}
+          >
+            Rs. {item?.strip_price}
+          </h3>
+        ) : (
+          ""
+        )}
+        <h1
+          style={{
+            width: "100%",
+            textAlign: "right",
+            marginTop: 0,
+            paddingTop: "0",
+          }}
+        >
           {item?.price ? "Rs." + item?.price : ""}
         </h1>
       </div>
@@ -182,127 +203,7 @@ const TypesOfOutlets = ({ item, value, organization }) => {
       >
         <h2>{value || 0}</h2>
       </div>
-      <>
-      {dropdown && (
-        <div
-          className="overlay"
-          style={{
-            zIndex: "99999",
-          }}
-        >
-          <motion.div
-            id="customer-details-dropdown"
-            initial={{ x: dropdown === "mobile" ? -100 : 100, y: 100 }}
-            animate={{ x: 0, y: 0 }}
-            className="flex"
-            style={
-              dropdown === "mobile"
-                ? {
-                    bottom: "12vh",
-                    left: "10%",
-                    flexDirection: "column",
-                    zIndex: "200",
-                    width: "max-content",
-                    height: "max-content",
-                  }
-                : {
-                    bottom: "12vh",
-                    right: "10%",
-                    flexDirection: "column",
-                    zIndex: "200",
-                    width: "max-content",
-                    height: "max-content",
-                  }
-            }
-            onMouseLeave={() => setDropDown(false)}
-          >
-            {dropdown === "mobile"
-              ? organization?.org_call_number.map((a) => (
-                  <button
-                    style={{
-                      padding: "10px",
-                      backgroundColor: "#01a0e2",
-                    }}
-                    className="simple_Logout_button"
-                    type="button"
-                    onClick={() => {
-                      window.open(`tel:+${a?.mobile}`);
-                      setDropDown(false);
-                    }}
-                  >
-                    {a.tag}
-                  </button>
-                ))
-              : organization?.org_whatsapp_number?.map((a) => (
-                  <button
-                    style={{
-                      padding: "10px",
-                      backgroundColor: "#0f9d15",
-                    }}
-                    className="simple_Logout_button"
-                    type="button"
-                    onClick={() => {
-                      window.open(
-                        `http://api.whatsapp.com/send?phone=${
-                          a?.mobile
-                        }&text=${encodeURI(a?.message)}`
-                      );
-                      setDropDown(false);
-                    }}
-                  >
-                    {a.tag}
-                  </button>
-                ))}
-          </motion.div>
-        </div>
-      )}
-      <motion.div
-        className="flex"
-        style={{
-          // backgroundColor: "transparent",
-          borderRadius: "50%",
-          width: "60px",
-          height: "60px",
-          fontWeight: "600",
-
-          letterSpacing: "2px",
-
-          bottom: "6vh",
-
-          left: "10%",
-          backgroundColor: "#01a0e2",
-
-          fontSize: "30px",
-          position: "fixed",
-          zIndex: dropdown === "mobile" ? "999999" : "9999",
-        }}
-        variant="extended"
-        onClick={() => setDropDown((prev) => (prev ? "" : "mobile"))}
-      >
-        <BsTelephoneFill sx={{ mr: 1 }} style={{ color: "#fff" }} />
-      </motion.div>
-      <motion.div
-        className="flex"
-        style={{
-          backgroundColor: "#0f9d15",
-          borderRadius: "50%",
-          width: "60px",
-          height: "60px",
-          fontWeight: "600",
-          // color: "white",
-          letterSpacing: "2px",
-          position: "fixed",
-          bottom: "6vh",
-
-          right: "10%",
-          zIndex: dropdown === "whatsapp" ? "999999" : "9999",
-        }}
-        variant="extended"
-        onClick={() => setDropDown((prev) => (prev ? "" : "whatsapp"))}
-      >
-        <img src={WhatsApp} alt="" />
-      </motion.div>
-    </>
+     
     </div>
   );
 };
