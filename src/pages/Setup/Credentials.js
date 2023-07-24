@@ -69,6 +69,7 @@ export default function Credentials() {
 		let itemData = organization
 		let url = await axios.post("s3/upload_url", { filename: image?.name, type: image?.type })
 		url = url.data.url
+		const key = url.data.key
 
 		const result = await axios({
 			url,
@@ -77,10 +78,9 @@ export default function Credentials() {
 			data: image
 		})
 		if (result.status === 200) {
-			let image_url = url?.split("?")[0]
 			itemData = {
 				organization_uuid: localStorage.getItem("organization_uuid"),
-				organization_logo: image_url
+				organization_logo: key
 			}
 		}
 
@@ -312,7 +312,7 @@ export default function Credentials() {
 							</div>
 							<div className="formGroup logo_image_container">
 								{organization?.organization_logo ? (
-									<img src={organization.organization_logo} alt="NoImage" />
+									<img src={`${axios.defaults.baseURL}s3/object_url/${organization.organization_logo}`} alt="NoImage" />
 								) : (
 									<h1>NO Logo</h1>
 								)}

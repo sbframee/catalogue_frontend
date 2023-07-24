@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar"
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/solid"
 import { Cancel, DeleteOutline, Edit, Image } from "@mui/icons-material"
 import axios from "axios"
+
 const ItemsPage = () => {
 	const [itemsData, setItemsData] = useState([])
 	const [disabledItem, setDisabledItem] = useState(false)
@@ -599,8 +600,8 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 	const submitHandler = async e => {
 		e.preventDefault()
 		let itemData = data
-		let url = await axios.post("s3/upload_url", { filename: images?.file?.name, type: images?.file?.type })
-		url = url.data.url
+		let _response = await axios.post("s3/upload_url", { filename: images?.file?.name, type: images?.file?.type })
+		const { url, key } = _response?.data?.url || {}
 
 		const result = await axios({
 			url,
@@ -610,12 +611,12 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 		})
 		if (result.status === 200) {
 			let image_url = {
-				url: url?.split("?")[0],
+				key: key,
 				sort_order: images?.sort_order || 0
 			}
 			itemData = {
 				...itemData,
-				image_urls: itemData?.image_urls?.length ? [...itemData?.image_urls, image_url] : [image_url]
+				image_keys: itemData?.image_keys?.length ? [...itemData?.image_keys, image_url] : [image_url]
 			}
 		}
 
@@ -636,7 +637,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 		e.preventDefault()
 		let itemData = {
 			...data,
-			image_urls: data.image_urls.filter(a => !deleteImages.find(b => b === a?.url))
+			image_keys: data.image_keys.filter(a => !deleteImages.find(b => b === a?.key))
 		}
 
 		const response = await axios({
@@ -744,16 +745,20 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 							)}
 							<div className="formGroup">
 								<div className="row">
-									{data?.image_urls?.length ? (
-										data?.image_urls.map(img => (
+									{data?.image_keys?.length ? (
+										data?.image_keys.map(img => (
 											<div
 												className="imageContainer"
-												style={deleteImages.find(b => b === img?.url) ? { border: "1px solid red" } : {}}
+												style={deleteImages.find(b => b === img?.key) ? { border: "1px solid red" } : {}}
 											>
-												<img src={img?.url} alt="NoImage" className="previwImages" />
-												{deleteImages.find(b => b === img?.url) ? (
+												<img
+													src={`${axios.defaults.baseURL}s3/object_url/${img?.key}`}
+													alt="NoImage"
+													className="previwImages"
+												/>
+												{deleteImages.find(b => b === img?.key) ? (
 													<button
-														onClick={() => setDeletedImages(prev => prev.filter(b => b !== img?.url))}
+														onClick={() => setDeletedImages(prev => prev.filter(b => b !== img?.key))}
 														className="closeButton"
 														style={{
 															fontSize: "20px",
@@ -768,7 +773,7 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 													</button>
 												) : (
 													<button
-														onClick={() => setDeletedImages(prev => [...prev, img?.url])}
+														onClick={() => setDeletedImages(prev => [...prev, img?.key])}
 														className="closeButton"
 														style={{
 															fontSize: "20px",
@@ -801,8 +806,8 @@ function PicturesPopup({ onSave, popupInfo, getItem }) {
 															setEditImages(true)
 															setdata(prev => ({
 																...prev,
-																image_urls: data.image_urls.map(b =>
-																	b.url === img?.url ? { ...b, sort_order: e.target.value } : b
+																image_keys: data.image_keys.map(b =>
+																	b.key === img?.key ? { ...b, sort_order: e.target.value } : b
 																)
 															}))
 														}}
